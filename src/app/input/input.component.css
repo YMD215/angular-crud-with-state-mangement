@@ -1,0 +1,15 @@
+#FormGroup{
+    margin-bottom: 18px;
+}
+.errors{
+    margin-top: 0.5rem !important;
+}
+#FormGroup:has(#confirmation){
+    margin-bottom: 40px;
+}
+input{
+    margin-bottom: 5px !important; 
+}
+#FormGroup:has(#password){
+    margin-bottom: 15px !important;
+}

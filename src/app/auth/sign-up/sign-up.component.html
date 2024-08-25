@@ -1,0 +1,28 @@
+<form class="ui form" (ngSubmit)="onSubmit()" [formGroup]="authForm">
+    <h3>
+        Creat a new account!!
+    </h3>
+
+    <app-input type="text" label="username" [control]="getControl('username')"></app-input>
+    <app-input type="password" label="Password" [control]="getControl('password')"></app-input>
+    <app-input type="password" label="confirmation" [control]="getControl('confirmation')">
+        @if (showError()) {
+            <div class="ui red basic label">
+                Confirmation Passwords do not match !!
+            </div>
+        }
+        @if (authForm.errors?.['networkIsBad']) {
+            <div class="ui red basic label">
+                Connection Error. Check your network !
+            </div>
+        }
+        @if (authForm.errors?.['FailedToSignUp']) {
+            <div class="ui red basic label">
+                Failed to sign up please try again later
+            </div>
+        }
+    </app-input>
+    <div>
+        <button type="submit" class="ui submit button primary" [disabled]="!authForm.valid">Submit</button>
+    </div>
+</form>

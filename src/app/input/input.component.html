@@ -1,0 +1,53 @@
+<div class="field" id="FormGroup">
+    <label [for]="label">{{ label }}</label>
+
+    @if(controlType == 'input'){
+        <input [type]="type" (input)="show()" [id]="label" [formControl]="control" >
+    }
+    @else if (controlType == 'textArea') {
+        <textarea (input)="show()" [id]="label" [formControl]="control"></textarea>
+    }
+    @if (showError()) {
+        @if (control.errors!['required']) {
+            <div class="ui pointing red basic label errors">
+                Value is required !!
+            </div>
+        }
+        @if (control.errors!['email']) {
+            <div class="ui pointing red basic label errors">
+                Invalid format for email !!
+            </div>
+        }
+        @if (control.errors!['minlength']) {
+            <div class="ui pointing red basic label errors">
+                Value you entered is {{ control.errors!['minlength'].actualLength }}
+                characters long. Minimum required is {{ control.errors!['minlength'].requiredLength }}
+                characters.
+            </div>
+        }
+        @if (control.errors!['maxlength']) {
+            <div class="ui pointing red basic label errors">
+                Value you entered is {{ control.errors!['maxlength'].actualLength }}
+                characters long. Maximum allowed is {{ control.errors!['maxlength'].requiredLength }}
+                characters.
+            </div>
+        }
+        @if (control.errors!['pattern'] || UnderScore == true) {
+            <div class="ui pointing red basic label errors">
+                Invalid format !!
+            </div>
+        }
+        @if (control.errors!['usernameIsTaken'] && UnderScore == false) {
+            <div class="ui pointing red basic label errors">
+                Username is Taken !
+            </div>
+        }
+        @if (control.errors!['networkIsBad']) {
+            <div class="ui pointing red basic label errors">
+                Network Is Bad !!
+            </div>
+        }
+    }
+    <ng-content></ng-content>
+
+</div>
