@@ -1,3 +1,5 @@
+<p-progressSpinner [class]="(isLoggedIn$ | async) != null ? 'disabled' : ''" #spinner aria-label="Loading" ></p-progressSpinner>
+
 <div class="ui container">
     <div class="ui secondary pointing menu mb">
         <a class="item active">YOUSSEF</a>
@@ -7,7 +9,7 @@
                 <a class="item" routerLinkActive="active" [routerLink]="['/Auth' , 'signIn']">Sign In</a>
             }
             @else {
-                <a class="item">Logout</a>
+                <a class="item" [routerLink]="['/Auth' , 'signOut']">Logout</a>
             }
         </div>
     </div>

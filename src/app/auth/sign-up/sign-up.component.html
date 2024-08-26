@@ -1,3 +1,5 @@
+<p-progressSpinner [class]="(signingUp$ | async) != null ? 'disabled' : ''" #spinner aria-label="Loading" ></p-progressSpinner>
+
 <form class="ui form" (ngSubmit)="onSubmit()" [formGroup]="authForm">
     <h3>
         Creat a new account!!
@@ -7,7 +9,7 @@
     <app-input type="password" label="Password" [control]="getControl('password')"></app-input>
     <app-input type="password" label="confirmation" [control]="getControl('confirmation')">
         @if (showError()) {
-            <div class="ui red basic label">
+            <div class="ui red basic label" style="margin-top: 0.5rem !important">
                 Confirmation Passwords do not match !!
             </div>
         }
@@ -16,9 +18,9 @@
                 Connection Error. Check your network !
             </div>
         }
-        @if (authForm.errors?.['FailedToSignUp']) {
-            <div class="ui red basic label">
-                Failed to sign up please try again later
+        @if (authForm.errors?.['AllreadyHaveAccount']) {
+            <div class="ui red basic label" style="margin-top: 10px;">
+                This Allready An Account !!
             </div>
         }
     </app-input>

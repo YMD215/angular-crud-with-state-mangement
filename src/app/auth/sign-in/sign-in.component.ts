@@ -1,18 +1,20 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { AuthService } from '../auth.service';
+import { Component, inject, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AuthService, ILoginUser } from '../auth.service';
 import { Router } from '@angular/router';
 import { InputComponent } from '../../input/input.component';
+import { CommonModule } from '@angular/common';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-sign-in',
   standalone: true,
-  imports: [InputComponent, ReactiveFormsModule],
+  imports: [InputComponent, ReactiveFormsModule, CommonModule, ProgressSpinnerModule],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.css'
 })
 export class SignInComponent {
-  constructor(private service: AuthService , private router: Router){}
   authForm = new FormGroup({
     username: new FormControl('', {
       validators:[
@@ -28,6 +30,40 @@ export class SignInComponent {
       Validators.maxLength(20),
     ]),
   })
+  
+  @ViewChild(FormGroupDirective) formGroupDirective!: FormGroupDirective;
+  submitService = inject(AuthService);
+  router = inject(Router);
+  signingUp$ = new BehaviorSubject<boolean | null>(false);
+
+  onSubmit(){
+    this.signingUp$.next(null);
+    let password: string | null = this.authForm.value.password!
+    let username: string | null = this.authForm.value.username!
+    if(this.authForm.valid){
+      this.submitService.signIn({username , password}).subscribe({
+        next: (response: ILoginUser) => {
+          this.router.navigateByUrl('/users');
+          console.log(response)
+          localStorage.setItem('users', JSON.stringify(response))
+          console.log('user' + JSON.parse(localStorage.getItem('user')!));
+          this.formGroupDirective.resetForm()
+          this.signingUp$.next(true);
+        },
+        error: (error) => {
+          if(error?.status){
+            this.authForm.setErrors( {networkIsBad: true} )          
+          }
+          else{
+            this.authForm.setErrors( {FailedToSignIp: true} )
+          }
+          this.formGroupDirective.resetForm(this.authForm.value)
+          this.signingUp$.next(false);
+        }
+      })
+    }
+  }
+
   getControl(item: string){
     return this.authForm.get(item) as FormControl
   }

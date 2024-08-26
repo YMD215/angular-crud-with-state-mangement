@@ -2,13 +2,16 @@ import { Component, ViewChild } from '@angular/core';
 import { InputComponent } from "../../input/input.component";
 import { FormGroup, FormControl, Validators, ReactiveFormsModule, FormGroupDirective } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth.service';
+import { AuthService, ILoginUser } from '../auth.service';
 import { Conformation } from '../../Validators/conformation';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { CommonModule } from '@angular/common';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-sign-up',
   standalone: true,
-  imports: [InputComponent, ReactiveFormsModule],
+  imports: [InputComponent, ReactiveFormsModule, ProgressSpinnerModule , CommonModule],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.css'
 })
@@ -42,31 +45,36 @@ export class SignUpComponent {
     ]),
   }, [this.conformation.validate])
 
+  signingUp$ = new BehaviorSubject<boolean | null>(false);
   onSubmit(){
+    this.signingUp$.next(null);
+    let password: string | null = this.authForm.value.password!
+    let username: string | null = this.authForm.value.username!
     if(this.authForm.valid){
-      let passwordConfirmation : string | null = this.authForm.value.confirmation!
-      let password: string | null = this.authForm.value.password!
-      let username: string | null = this.authForm.value.username!
-      this.submitService.submitUser({username , password , passwordConfirmation}).subscribe({
-        next: (response) => {
-          this.router.navigateByUrl('/users');
-          console.log(response)
-          this.authForm.reset()
-        },
-        error: (error) => {
-          if (!error.stats){
-            console.error(error)
-            this.authForm.setErrors( {networkIsBad: true} )
+        this.submitService.submitUser({username , password}).subscribe({
+          next: (response) => {
+            this.router.navigateByUrl('/users');
+            console.log(response)
+            this.formGroupDirective.resetForm()
+            this.signingUp$.next(true);
+          },
+          error: (error) => {
             this.formGroupDirective.resetForm(this.authForm.value)
+            this.signingUp$.next(false);
+            if(error?.status){
+              this.authForm.setErrors( {networkIsBad: true} )          
+            }
+            else{
+              this.authForm.setErrors( {AllreadyHaveAccount: true} )
+            }
           }
-          if (error.stats){
-            console.error(error)
-            this.authForm.setErrors( {FailedToSignUp: true} )
-            this.formGroupDirective.resetForm(this.authForm.value)
-         }
-        }
-      })
-    }
+        })
+      }
+      // else{
+      //   this.formGroupDirective.resetForm(this.authForm.value)
+      //   this.signingUp$.next(false);
+      //   this.authForm.setErrors( {AllreadyHaveAccount: true} )
+      // }
   }
 
   getControl(item: string){
@@ -76,4 +84,7 @@ export class SignUpComponent {
   showError(){
     return this.authForm.controls.password.dirty &&  this.authForm.controls.confirmation.dirty && this.authForm.controls.password.touched && this.authForm.errors?.['confirmation']
   }
+
+
+
 }

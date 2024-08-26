@@ -1,18 +1,25 @@
-<form class="ui form" [formGroup]="authForm">
+<p-progressSpinner [class]="(signingUp$ | async) != null ? 'disabled' : ''" #spinner aria-label="Loading" ></p-progressSpinner>
+
+<form class="ui form" (ngSubmit)="onSubmit()" [formGroup]="authForm">
     <h3>
         Sign in to your Account !!
     </h3>
 
     <app-input type="text" label="username" [control]="getControl('username')"></app-input>
     <app-input type="password" label="password" [control]="getControl('password')"></app-input>
-    @if (authForm.errors?.['credential']) {
+    @if (authForm.errors?.['FailedToSignIp']) {
         <div class="ui red basic label" style="margin-bottom: 20px;">
-            Username or Password is Wrong !!
+            Failed to sign up please check your username or password
         </div>
     }
     @if (authForm.errors?.['networkIsBad']) {
         <div class="ui red basic label" style="margin-bottom: 20px;">
             Connection Error. Check your network!
+        </div>
+    }
+    @if (authForm.errors?.['networkIsBad']) {
+        <div class="ui red basic label">
+            Connection Error. Check your network !
         </div>
     }
     <div>

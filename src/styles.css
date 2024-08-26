@@ -6,3 +6,22 @@
     padding: 0;
     box-sizing: border-box;
 }
+p-progressSpinner{
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 500000;
+    background-color: rgba(0, 0, 0, 0.534);
+}
+.p-progress-spinner{
+    position: absolute;
+    z-index: 10000000000000;
+}
+.disabled{
+    display: none;
+}
