@@ -5,6 +5,7 @@ import { AdminComponent } from './auth/admin/admin.component';
 import { UserDetailComponent } from './users/user-detail/user-detail.component';
 import { UserListComponent } from './users/user-list/user-list.component';
 import { SignOutComponent } from './auth/sign-out/sign-out.component';
+import { authGuard, inverseAuthGuard } from './shared/guards/auth';
 
 export const routes: Routes = [
     {
@@ -14,6 +15,7 @@ export const routes: Routes = [
     },
     {
         path: 'Auth', 
+        canMatch: [inverseAuthGuard],
         loadComponent:() => import('./auth/auth.component').
         then(m => m.AuthComponent),
         children: [
@@ -25,12 +27,13 @@ export const routes: Routes = [
             },
             {path: 'signIn' ,  component: SignInComponent},
             {path: 'signUp' ,  component: SignUpComponent},
-            {path: 'signOut' ,  component: SignOutComponent},
             {path: 'admin' , component: AdminComponent}
         ]
     },
+    {path: 'signOut' ,  component: SignOutComponent},
     {
-        path: "users" , 
+        path: "users" ,
+        canMatch: [authGuard],
         loadComponent: () => import("./users/users.component")
         .then((m) => m.UsersComponent),
         children: [

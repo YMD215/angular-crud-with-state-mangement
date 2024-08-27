@@ -1,8 +1,8 @@
-import { Component, ElementRef, inject, viewChild } from '@angular/core';
+import { Component, computed, ElementRef, inject, signal, viewChild } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from './auth/auth.service';
 import { CommonModule } from '@angular/common';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, single } from 'rxjs';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 @Component({
   selector: 'app-root',
@@ -12,15 +12,14 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  isLoggedIn$: BehaviorSubject<boolean | null>
-  constructor(private authService: AuthService){
+  isLoggedIn$: BehaviorSubject<boolean | null>  
+  constructor(private authService: AuthService){    
     this.isLoggedIn$ = this.authService.subject$
   }
   rotuer = inject(Router);
-
   ngOnInit(): void {
     this.authService.checkAuth().subscribe((res) => {
-      if(res){
+      if (res){
         this.rotuer.navigateByUrl('/users');
       }
       console.log('authintecated: ' + res);

@@ -4,14 +4,18 @@
     <div class="ui secondary pointing menu mb">
         <a class="item active">YOUSSEF</a>
         <div class="right menu">
-            @if (!(isLoggedIn$ | async)) {
-                <a class="item" routerLinkActive="active" [routerLink]="['/Auth' , 'signUp']">Sign Up</a>
-                <a class="item" routerLinkActive="active" [routerLink]="['/Auth' , 'signIn']">Sign In</a>
-            }
-            @else {
-                <a class="item" [routerLink]="['/Auth' , 'signOut']">Logout</a>
+            @if ((isLoggedIn$ | async) != null) {
+                @if (!(isLoggedIn$ | async) ) {
+                    <a class="item" routerLinkActive="active" [routerLink]="['/Auth' , 'signUp']">Sign Up</a>
+                    <a class="item" routerLinkActive="active" [routerLink]="['/Auth' , 'signIn']">Sign In</a>
+                }
+                @else {
+                    <a class="item" [routerLink]="['signOut']">Logout</a>
+                }
             }
         </div>
     </div>
-    <router-outlet></router-outlet>
+    @if ((isLoggedIn$ | async) != null) {
+        <router-outlet></router-outlet>
+    }
 </div>

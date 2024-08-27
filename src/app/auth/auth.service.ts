@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, signal } from '@angular/core';
 import { BehaviorSubject, delay, Observable, of, retry, switchMap, tap, throwError, timer } from 'rxjs';
 
 export interface ILoginUser{
@@ -19,14 +19,13 @@ export class AuthService {
   subject$ = new  BehaviorSubject<boolean | null>(null)
   constructor(private http: HttpClient) { }
   api = "https://reqres.in/api/"
+  canNav = signal(true);
   username = '';
   submitUser(value: ILoginUser){
-
     if (this.authenticatedUser(value.username!, value.password!)) {
       return timer(1000).pipe(
         tap(() => {
-          console.log('taken!!');
-          
+          console.log('taken!!');    
         }),
         switchMap(() => {
           return throwError(() => new Error('AllreadyHaveAccount'));
@@ -78,21 +77,23 @@ export class AuthService {
   }
 
   signIn(value: ILoginUser){
-    let {username , password} = value
+    let {username , password} = value;
     if (!this.authenticatedUser(username! , password!)){
       return timer(2000).pipe(
         switchMap(() => {
-          return throwError(() => new Error('FailedToSignUp'));
+          return throwError(() => new Error('FailedToSignIn'));
         })
       );
     }
     return of(value).pipe(
       delay(2000),
       tap(() => {
+        localStorage.setItem('signIn', 'true');
         this.subject$.next(true);
       })
     )
   }
+
   authenticatedUser(username: string, password: string) {    
     const users: ILoginUser[] = JSON.parse(localStorage.getItem('users')!) || [];
     if(Array.isArray(users) && users){
@@ -105,6 +106,7 @@ export class AuthService {
     }
     return false;
   }
+
   addUserToLocalStorage(newUser: ILoginUser) {
     let users: any[] = JSON.parse(localStorage.getItem('users') || '[]'); 
     if (!Array.isArray(users)) {

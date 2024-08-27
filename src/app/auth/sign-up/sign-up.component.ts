@@ -1,9 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
-import { InputComponent } from "../../input/input.component";
+import { InputComponent } from "../../shared/input/input.component";
 import { FormGroup, FormControl, Validators, ReactiveFormsModule, FormGroupDirective } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService, ILoginUser } from '../auth.service';
-import { Conformation } from '../../Validators/conformation';
+import { Conformation } from '../../shared/Validators/conformation';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject } from 'rxjs';

@@ -7,7 +7,7 @@
 
     <app-input type="text" label="username" [control]="getControl('username')"></app-input>
     <app-input type="password" label="password" [control]="getControl('password')"></app-input>
-    @if (authForm.errors?.['FailedToSignIp']) {
+    @if (authForm.errors?.['FailedToSignIn']) {
         <div class="ui red basic label" style="margin-bottom: 20px;">
             Failed to sign up please check your username or password
         </div>

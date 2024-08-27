@@ -2,7 +2,7 @@ import { Component, inject, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, FormGroupDirective, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AuthService, ILoginUser } from '../auth.service';
 import { Router } from '@angular/router';
-import { InputComponent } from '../../input/input.component';
+import { InputComponent } from '../../shared/input/input.component';
 import { CommonModule } from '@angular/common';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { BehaviorSubject } from 'rxjs';
@@ -45,19 +45,18 @@ export class SignInComponent {
         next: (response: ILoginUser) => {
           this.router.navigateByUrl('/users');
           console.log(response)
-          localStorage.setItem('users', JSON.stringify(response))
-          console.log('user' + JSON.parse(localStorage.getItem('user')!));
+          console.log('users' + JSON.parse(localStorage.getItem('users')!));
           this.formGroupDirective.resetForm()
           this.signingUp$.next(true);
         },
         error: (error) => {
+          this.formGroupDirective.resetForm(this.authForm.value)
           if(error?.status){
             this.authForm.setErrors( {networkIsBad: true} )          
           }
           else{
-            this.authForm.setErrors( {FailedToSignIp: true} )
+            this.authForm.setErrors( {FailedToSignIn: true} )
           }
-          this.formGroupDirective.resetForm(this.authForm.value)
           this.signingUp$.next(false);
         }
       })
