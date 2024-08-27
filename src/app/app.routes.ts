@@ -16,6 +16,7 @@ export const routes: Routes = [
     {
         path: 'Auth', 
         canMatch: [inverseAuthGuard],
+        // canActivate: [prevntNavigation],
         loadComponent:() => import('./auth/auth.component').
         then(m => m.AuthComponent),
         children: [
