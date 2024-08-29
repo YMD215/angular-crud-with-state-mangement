@@ -3,8 +3,13 @@ import { Injectable, signal } from '@angular/core';
 import { BehaviorSubject, delay, Observable, of, retry, switchMap, tap, throwError, timer } from 'rxjs';
 
 export interface ILoginUser{
-  username: string | null;
-  password: string | null;
+  username?: string | null;
+  password?: string | null;
+}
+export interface INewUser{
+  username?: string | null;
+  password?: string | null;
+  confirmation?: string | null;
 }
 export interface IUserRes{
     value : ILoginUser
@@ -17,6 +22,8 @@ export interface IUserRes{
 })
 export class AuthService {
   subject$ = new  BehaviorSubject<boolean | null>(null)
+  signInData: ILoginUser = {username: '', password: ''};
+  signUpData: INewUser = {username: '', password: '', confirmation: ''};
   constructor(private http: HttpClient) { }
   api = "https://reqres.in/api/"
   canNav = signal(true);
@@ -50,9 +57,8 @@ export class AuthService {
     console.log('checking');
     return of(localStorage.getItem('signIn') == 'true').pipe(
       delay(2000),
-      tap(() => {
-        let check = JSON.parse(localStorage.getItem('signIn')!);
-        if(check){
+      tap((value) => {
+        if(value){
           this.subject$.next(true)
         }
         else{

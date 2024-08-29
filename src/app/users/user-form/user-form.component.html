@@ -1,1 +1,14 @@
-<p>user-form works!</p>
+<form (ngSubmit)="onSubmit()" class="ui form" [formGroup]="userForm">
+    <app-input label="Name" type="email" [control]="getControl('name')"></app-input>
+    <app-input label="Email" type="email" [control]="getControl('email')"></app-input>
+    <app-input label="address" type="email" [control]="getControl('address')"></app-input>
+    @if (userForm.errors?.['AllreadyExistUser']) {
+        <div class="ui red basic label errors">
+            this user allready exist !!
+        </div>
+    }
+    <div class="btns">
+        <button [disabled]="!userForm.valid" class="ui grey button" (click)="Reset()" type="reset" fdprocessedid="n3tu2h">Reset</button>
+        <button [disabled]="!userForm.valid" fdprocessedid="j8w0o" type="submit" class="ui green button">Add</button>
+    </div>
+</form>

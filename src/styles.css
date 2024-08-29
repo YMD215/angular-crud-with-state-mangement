@@ -1,10 +1,32 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'semantic-ui-css/semantic.css';
 
-*{
+#edit{
+    margin-right: 6px !important;
+}
+div:not(button){
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+}
+#add .p-button.p-button-outlined{
+    color: rgb(102, 238, 97) !important;
+    background-color: white;
+}
+#add .p-button.p-button-outlined:not(:disabled):hover{
+    background: rgba(44, 243, 33, 0.089);
+}
+#add .p-button.p-button-outlined:not(:disabled):active {
+    background: rgba(44, 243, 33, 0.158);
+}
+.p-datatable .p-datatable-thead > tr > th{
+    background: rgb(249 249 249 / 34%) !important;
+}
+.another-actions{
+    width: 100%;
+    display: flex;
+    justify-content: end;
+    margin-top: 20px;
 }
 p-progressSpinner{
     position: fixed;
@@ -15,12 +37,12 @@ p-progressSpinner{
     left: 0;
     width: 100%;
     height: 100vh;
-    z-index: 500000;
+    z-index: 9;
     background-color: rgba(0, 0, 0, 0.534);
 }
 .p-progress-spinner{
     position: absolute;
-    z-index: 10000000000000;
+    z-index: 10;
 }
 .disabled{
     display: none;

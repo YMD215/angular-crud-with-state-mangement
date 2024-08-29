@@ -85,6 +85,14 @@ export class SignUpComponent {
     return this.authForm.controls.password.dirty &&  this.authForm.controls.confirmation.dirty && this.authForm.controls.password.touched && this.authForm.errors?.['confirmation']
   }
 
-
+  ngOnDestroy(): void {
+    this.submitService.signUpData = this.authForm.value
+    console.log(this.submitService.signUpData);
+  }
+  ngAfterContentInit(): void {
+      this.authForm.get('username')?.setValue(this.submitService.signUpData?.username!);    
+      this.authForm.get('password')?.setValue(this.submitService.signUpData?.password!);    
+      this.authForm.get('confirmation')?.setValue(this.submitService.signUpData?.confirmation!);    
+  }
 
 }

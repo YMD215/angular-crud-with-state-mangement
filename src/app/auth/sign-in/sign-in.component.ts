@@ -67,4 +67,12 @@ export class SignInComponent {
     return this.authForm.get(item) as FormControl
   }
 
+  ngOnDestroy(): void {
+    this.submitService.signInData = this.authForm.value
+    console.log(this.submitService.signInData);
+  }
+  ngAfterContentInit(): void {
+      this.authForm.get('username')?.setValue(this.submitService.signInData?.username!);    
+      this.authForm.get('password')?.setValue(this.submitService.signInData?.password!);    
+  }
 }
